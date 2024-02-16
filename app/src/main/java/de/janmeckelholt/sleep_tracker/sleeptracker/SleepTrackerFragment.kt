@@ -17,12 +17,13 @@ import de.janmeckelholt.sleep_tracker.databinding.FragmentSleepTrackerBinding
 class SleepTrackerFragment : Fragment() {
 
     private lateinit var viewModel: SleepTrackerViewModel
+    private lateinit var binding : FragmentSleepTrackerBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val binding: FragmentSleepTrackerBinding= DataBindingUtil.inflate(inflater, R.layout.fragment_sleep_tracker, container, false)
+        binding= DataBindingUtil.inflate(inflater, R.layout.fragment_sleep_tracker, container, false)
         val application = requireNotNull(this.activity).application
         val dataSource = SleepDatabase.getInstance(application).sleepDatabaseDao
         val viewModelFactory = SleepTrackerViewModelFactory(dataSource, application)
@@ -35,7 +36,6 @@ class SleepTrackerFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(SleepTrackerViewModel::class.java)
-        // TODO: Use the ViewModel
     }
 
 }
