@@ -48,8 +48,22 @@ class SleepDatabaseTest {
         runBlocking {
             sleepDao.insert(night)
             val tonight = sleepDao.getTonight()
-            assertEquals(tonight?.sleepQuality, -1)
+            assertEquals(-1, tonight?.sleepQuality)
         }
     }
+
+    @Test
+    @Throws(Exception::class)
+    fun testGetAll() {
+        runBlocking {
+            val night1 = SleepNight()
+            val night2 = SleepNight(startTimeMilli = 1111, endTimeMilli = 2222, sleepQuality = 4)
+            sleepDao.insert(night1)
+            sleepDao.insert(night2)
+            val nights = sleepDao.getAllNights()
+            assertEquals(2, nights.size )
+        }
+    }
+
 }
 
