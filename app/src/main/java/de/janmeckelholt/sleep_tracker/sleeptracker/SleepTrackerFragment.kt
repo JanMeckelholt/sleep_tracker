@@ -7,11 +7,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.get
-import androidx.lifecycle.viewmodel.viewModelFactory
+import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import de.janmeckelholt.sleep_tracker.R
 import de.janmeckelholt.sleep_tracker.database.SleepDatabase
-import de.janmeckelholt.sleep_tracker.databinding.FragmentSleepQualityBinding
 import de.janmeckelholt.sleep_tracker.databinding.FragmentSleepTrackerBinding
 
 class SleepTrackerFragment : Fragment() {
@@ -30,12 +29,16 @@ class SleepTrackerFragment : Fragment() {
         viewModel = ViewModelProvider(this, viewModelFactory).get(SleepTrackerViewModel::class.java)
         binding.lifecycleOwner = this
         binding.sleepTrackerViewModel = viewModel
+        viewModel.navigateToSleepQuality.observe(viewLifecycleOwner, Observer {
+            night ->
+            night?.let {
+                val bundle = Bundle()
+                bundle.putLong("sleepNightKey", it.nightId)
+                this.findNavController().navigate(R.id.action_sleepTrackerFragment_to_sleepQualityFragment, bundle)
+                viewModel.doneNavigating()
+            }
+        })
         return binding.root
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(SleepTrackerViewModel::class.java)
     }
 
 }

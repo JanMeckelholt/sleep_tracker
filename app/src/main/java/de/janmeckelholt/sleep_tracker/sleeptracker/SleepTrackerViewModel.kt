@@ -2,14 +2,13 @@ package de.janmeckelholt.sleep_tracker.sleeptracker
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
 import de.janmeckelholt.sleep_tracker.database.SleepDatabaseDao
 import de.janmeckelholt.sleep_tracker.database.SleepNight
 import de.janmeckelholt.sleep_tracker.formatNights
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
 class SleepTrackerViewModel(val database: SleepDatabaseDao, application: Application) :
@@ -18,6 +17,14 @@ class SleepTrackerViewModel(val database: SleepDatabaseDao, application: Applica
     private val nights = database.getAllNights()
     val nightsStr = nights.map {
         formatNights(it, application.resources)
+    }
+
+    private  val _navigateToSleepQuality = MutableLiveData<SleepNight?>()
+    val navigateToSleepQuality : LiveData<SleepNight?>
+        get() = _navigateToSleepQuality
+
+    fun doneNavigating(){
+        _navigateToSleepQuality.value=null
     }
 
     init {
@@ -51,8 +58,10 @@ class SleepTrackerViewModel(val database: SleepDatabaseDao, application: Applica
             tonight.value?.let {
                 it.endTimeMilli = System.currentTimeMillis()
                 update(it)
+                _navigateToSleepQuality.value=it
             }
         }
+
     }
 
     fun onClear() {

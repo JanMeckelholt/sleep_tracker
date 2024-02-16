@@ -61,7 +61,7 @@ class SleepDatabaseTest {
             sleepDao.insert(night1)
             sleepDao.insert(night2)
             val nights = sleepDao.getAllNights()
-            assertEquals(2, nights.size )
+            assertEquals(2, nights.value?.size)
         }
     }
 
