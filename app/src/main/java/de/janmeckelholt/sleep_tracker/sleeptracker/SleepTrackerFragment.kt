@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.snackbar.Snackbar
 import de.janmeckelholt.sleep_tracker.R
 import de.janmeckelholt.sleep_tracker.database.SleepDatabase
 import de.janmeckelholt.sleep_tracker.databinding.FragmentSleepTrackerBinding
@@ -27,7 +28,7 @@ class SleepTrackerFragment : Fragment() {
         val dataSource = SleepDatabase.getInstance(application).sleepDatabaseDao
         val viewModelFactory = SleepTrackerViewModelFactory(dataSource, application)
         viewModel = ViewModelProvider(this, viewModelFactory).get(SleepTrackerViewModel::class.java)
-        binding.lifecycleOwner = this
+        binding.lifecycleOwner = viewLifecycleOwner
         binding.sleepTrackerViewModel = viewModel
         viewModel.navigateToSleepQuality.observe(viewLifecycleOwner, Observer {
             night ->
@@ -38,6 +39,17 @@ class SleepTrackerFragment : Fragment() {
                 viewModel.doneNavigating()
             }
         })
+        viewModel.showSnackBarEvent.observe(viewLifecycleOwner, Observer {
+            if (it == true) {
+                Snackbar.make(
+                    requireActivity().findViewById(android.R.id.content),
+                    getString(R.string.cleared_message),
+                    Snackbar.LENGTH_SHORT
+                ).show()
+                viewModel.doneShowingSnackBar()
+            }
+        })
+
         return binding.root
     }
 

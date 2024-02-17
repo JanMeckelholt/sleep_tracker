@@ -28,7 +28,7 @@ class SleepQualityFragment : Fragment() {
         val dataSource = SleepDatabase.getInstance(application).sleepDatabaseDao
         val viewModelFactory = SleepQualityViewModelFactory(dataSource, args.sleepNightKey)
         viewModel = ViewModelProvider(this, viewModelFactory).get(SleepQualityViewModel::class.java)
-        binding.lifecycleOwner = this
+        binding.lifecycleOwner = viewLifecycleOwner
         binding.viewModel = viewModel
         viewModel.navigateToSleepTracker.observe(viewLifecycleOwner, Observer {
             if (it) {

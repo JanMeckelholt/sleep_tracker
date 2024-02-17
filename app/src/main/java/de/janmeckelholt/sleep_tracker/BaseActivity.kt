@@ -6,8 +6,8 @@ import androidx.appcompat.app.AppCompatActivity
 import timber.log.Timber
 
 open class BaseActivity : AppCompatActivity(){
-    override fun onCreate(savedInstanceState: Bundle?, persistentState: PersistableBundle?) {
-        super.onCreate(savedInstanceState, persistentState)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         Timber.plant(Timber.DebugTree())
     }
 }

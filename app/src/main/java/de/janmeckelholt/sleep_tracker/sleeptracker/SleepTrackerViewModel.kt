@@ -1,6 +1,7 @@
 package de.janmeckelholt.sleep_tracker.sleeptracker
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -10,6 +11,7 @@ import de.janmeckelholt.sleep_tracker.database.SleepDatabaseDao
 import de.janmeckelholt.sleep_tracker.database.SleepNight
 import de.janmeckelholt.sleep_tracker.formatNights
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 class SleepTrackerViewModel(val database: SleepDatabaseDao, application: Application) :
     AndroidViewModel(application) {
@@ -26,6 +28,16 @@ class SleepTrackerViewModel(val database: SleepDatabaseDao, application: Applica
     val stopButtonVisible = tonight.map {
         return@map (it != null)
     }
+
+    private var _showSnackBarEvent = MutableLiveData<Boolean>()
+
+    val showSnackBarEvent : LiveData<Boolean>
+        get() = _showSnackBarEvent
+
+    fun doneShowingSnackBar() {
+        _showSnackBarEvent.value=false
+    }
+
 
     private  val _navigateToSleepQuality = MutableLiveData<SleepNight?>()
     val navigateToSleepQuality : LiveData<SleepNight?>
@@ -73,9 +85,11 @@ class SleepTrackerViewModel(val database: SleepDatabaseDao, application: Applica
     }
 
     fun onClear() {
+        Timber.e("----------->onClear")
         viewModelScope.launch {
             clear()
             tonight.value = null
+            _showSnackBarEvent.value = true
         }
     }
 
