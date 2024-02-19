@@ -44,7 +44,6 @@ class SleepTrackerFragment : Fragment() {
 
         viewModel.navigateToSleepDetail.observe(viewLifecycleOwner, Observer {
             it?.let {
-                Timber.i("clicked $it")
                 val bundle = Bundle()
                 bundle.putLong("sleepNightKey", it)
                 this.findNavController()
@@ -56,7 +55,7 @@ class SleepTrackerFragment : Fragment() {
         binding.sleepList.adapter = adapter
         viewModel.nights.observe(viewLifecycleOwner, Observer {
             it?.let {
-                adapter.submitList(it)
+                adapter.addHeaderAndSubmitList(it)
             }
         })
         viewModel.navigateToSleepQuality.observe(viewLifecycleOwner, Observer { night ->

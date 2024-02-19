@@ -1,11 +1,8 @@
-package de.janmeckelholt.sleep_tracker.sleeptracker
+package de.janmeckelholt.sleep_tracker
 
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
-import de.janmeckelholt.sleep_tracker.R
-import de.janmeckelholt.sleep_tracker.convertDurationToFormatted
-import de.janmeckelholt.sleep_tracker.convertNumericQualityToString
 import de.janmeckelholt.sleep_tracker.database.SleepNight
 
 @BindingAdapter("sleepDurationFormatted")
