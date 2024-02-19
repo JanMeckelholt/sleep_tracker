@@ -6,7 +6,6 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
-import java.time.LocalDate
 
 @Dao
 interface SleepDatabaseDao {
@@ -28,5 +27,8 @@ interface SleepDatabaseDao {
 
     @Query("DELETE FROM daily_sleep_quality_table")
     suspend fun clear()
+
+    @Query("SELECT * from daily_sleep_quality_table WHERE nightId = :key")
+    fun getNightWithId(key: Long): LiveData<SleepNight>
 
 }

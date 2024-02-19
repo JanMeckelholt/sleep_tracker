@@ -8,7 +8,6 @@ import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
 import de.janmeckelholt.sleep_tracker.database.SleepDatabaseDao
 import de.janmeckelholt.sleep_tracker.database.SleepNight
-import de.janmeckelholt.sleep_tracker.formatNights
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
@@ -45,7 +44,13 @@ class SleepTrackerViewModel(val database: SleepDatabaseDao, application: Applica
 
     fun doneNavigating(){
         _navigateToSleepQuality.value=null
+        _navigateToSleepDetail.value=null
     }
+
+    private val _navigateToSleepDetail = MutableLiveData<Long?>()
+
+    val navigateToSleepDetail : LiveData<Long?>
+        get() = _navigateToSleepDetail
 
     init {
         initializeTonight()
@@ -65,6 +70,11 @@ class SleepTrackerViewModel(val database: SleepDatabaseDao, application: Applica
         return night
     }
 
+    fun onSleepNightClicked(id: Long) {
+        viewModelScope.launch {
+            _navigateToSleepDetail.value = id
+        }
+    }
     fun onStartTracking() {
         viewModelScope.launch {
             val newNight = SleepNight()
